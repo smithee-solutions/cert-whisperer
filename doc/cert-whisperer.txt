@@ -1,0 +1,30 @@
+Create a config file
+
+Create a JSON file with configuration details.  The default name
+is CA-setup.json in the current directory.
+
+run blah
+
+
+Configuration File:
+
+download - directory in which to create OpenSSL CA files.  Value is pathname.
+nopw - Don't set private key password.  No value.
+privkey - Pass phrase for private key.
+subject - subjectName of CA
+
+// days 32
+// SCRUB
+// RECREATE
+
+Examples
+
+{
+  "download" = "test",
+  "nopw"
+}
+{
+  "download" = "test",
+  "privkey" = "password"
+}
+
