@@ -70,6 +70,10 @@ typedef struct cw_context
 
 
 int
+  cw_sign
+    (CW_CONTEXT
+      *ctx);
+int
   parse_config
     (CW_CONTEXT
       *ctx);

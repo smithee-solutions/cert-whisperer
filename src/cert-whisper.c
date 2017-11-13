@@ -182,12 +182,15 @@ int
       break;
 
     case CW_CMD_SIGN:
+#if 0
       sprintf (command,
 "openssl ca -config %s -batch -key %s_key.pem -extensions %s -infiles %s_req.pem",
         ctx->openssl_config_path, ctx->cert_name, ctx->ca_specs_1, ctx->cert_name);
       if (ctx->verbosity > 3)
         fprintf (stderr, "Command is: %s\n", command);
       system (command);
+#endif
+      status = cw_sign (ctx);
       break;
 
     default:

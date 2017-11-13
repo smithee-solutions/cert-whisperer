@@ -1,0 +1,8 @@
+{
+  "download" : "test-ca-1",
+  "cert-command" : "issue",
+  "cert-name" : "server200",
+  "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=server-200.example.com",
+  "#" : "_the-end"
+}
+

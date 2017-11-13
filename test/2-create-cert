@@ -1,0 +1,7 @@
+#!/bin/bash
+set -x
+TROOT=opt/tester
+TBIN=/${TROOT}/bin
+${TBIN}/cert-whisper cw-setup-keypair-create.json
+${TBIN}/cert-whisper cw-sign.json
+

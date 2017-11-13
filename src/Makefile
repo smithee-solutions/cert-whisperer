@@ -34,8 +34,8 @@ build:	all
 	mkdir -p ${TROOT}/etc/cwCA
 	cp ${SCRIPTS} ${TROOT}/etc/cwCA
 
-cert-whisper:	cert-whisper.o cw-utils.o Makefile
-	${LD} -o cert-whisper cert-whisper.o cw-utils.o ${LDFLAGS} -ljansson
+cert-whisper:	cert-whisper.o cw-signer.o cw-utils.o Makefile
+	${LD} -o cert-whisper cert-whisper.o cw-signer.o cw-utils.o ${LDFLAGS} -ljansson
 
 cert-whisper.o:	cert-whisper.c ../include/cert-whisperer.h
 	${CC} ${CFLAGS} cert-whisper.c
@@ -45,6 +45,9 @@ configure-CA:	configure-CA.o cw-utils.o Makefile
 
 configure-CA.o:	configure-CA.c ../include/cert-whisperer.h
 	${CC} ${CFLAGS} configure-CA.c
+
+cw-signer.o:	cw-signer.c ../include/cert-whisperer.h
+	${CC} ${CFLAGS} cw-signer.c
 
 cw-utils.o:	cw-utils.c ../include/cert-whisperer.h
 	${CC} ${CFLAGS} cw-utils.c
