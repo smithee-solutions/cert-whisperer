@@ -1,0 +1,8 @@
+{
+  "download" : "CA-01-VHC",
+  "cert-command" : "issue",
+  "cert-name" : "ca_02_VSA",
+  "subject" : "/C=VV/ST=Vulcan/L=ShiKahr/O=Vulcan Science Academy/OU=Field Office/CN=CA-02-VSA",
+  "#" : "_the-end"
+}
+

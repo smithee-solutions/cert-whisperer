@@ -93,6 +93,21 @@ int
     strcpy (ctx->cert_name, json_string_value (value));
   };
 
+  // nopw causes no password; pw= causes passphrase
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy (field, "nopw");
+    value = json_object_get (ctx->root, field);
+    if (!json_is_string (value))
+      found_field = 0;
+  };
+  if (found_field)
+  {
+    ctx->option_pw_privkey = 0;
+  };
+
   // privkey is the private key password
 
   if (status EQUALS STCW_OK)

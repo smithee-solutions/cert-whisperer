@@ -1,0 +1,7 @@
+{
+  "download" : "CA-01-VHC",
+  "cert-command" : "sign",
+  "cert-name" : "ca_02_VSA",
+  "#" : "_the-end"
+}
+

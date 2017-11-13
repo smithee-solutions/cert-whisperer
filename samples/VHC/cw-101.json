@@ -1,0 +1,8 @@
+{
+  "download" : "CA-01-VHC",
+  "ca-template" : "./firstContact-TEMPLATE.cnf",
+  "subject" : "/C=VV/ST=Vulcan/L=ShiKahr/O=Vulcan High Council/OU=Research/CN=CA-01-VHC",
+  "#" : "_the-end"
+}
+
+

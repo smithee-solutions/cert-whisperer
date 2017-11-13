@@ -1,0 +1,5 @@
+#!/bin/bash
+set -x
+rm -rf *.pem
+rm -rf CA-01-VHC CA-02-VSA CA-03-FCSHIP create_certificates.log
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+set -x
+
+/opt/tester/bin/configure-CA cw-101.json
+/opt/tester/bin/cert-whisper cw-102-1.json
+/opt/tester/bin/cert-whisper cw-102-2.json
+
