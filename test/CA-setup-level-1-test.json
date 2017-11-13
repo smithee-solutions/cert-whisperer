@@ -1,7 +1,6 @@
 {
   "download" : "test-ca-1",
-  "CA-dirname" : "demoCA",
-  "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=test-ca",
+  "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=test-ca-1",
   "#" : "_the-end"
 }
 

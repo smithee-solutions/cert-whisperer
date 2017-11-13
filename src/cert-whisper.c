@@ -1,11 +1,11 @@
 /*
-  configure-CA - create a CA.  Part of cert-whisperer.
+  cert-whisper - manage certificates.  Part of cert-whisperer.
 
 
   Usage
 
-  configure-CA <openssl config file>
-  assumes thing1.json is in current directory.
+  cert-whisper [cert whisperer json parameter file]
+  assumes cert-whisper.json in current directory as default.
 
 
   Copyright 2017 Smithee Solutions LLC
@@ -32,19 +32,6 @@
 #include <cert-whisperer.h>
 
 
-#define RECREATE
-#define SCRUB
-
-
-#define EQUALS ==
-
-
-int
-  setup_CA
-    (CW_CONTEXT
-      *ctx);
-
-
 int
   main
     (int
@@ -52,7 +39,7 @@ int
     char
       *argv [])
 
-{ /* configure_ca */
+{ /* main for cert-whisper */
 
   FILE
     *cmdf;
@@ -68,6 +55,8 @@ int
     found_field;
   char
     json_string [4096];
+  char
+    *option_encrypt;
   int
     status;
   int
@@ -82,29 +71,21 @@ int
   ctx = &context;
   memset (ctx, 0, sizeof (*ctx));
   ctx->verbosity = 9;
-  strcpy (ctx->CA_template, "/opt/tester/etc/cwCA/openssl-TEMPLATE_1.cnf");
   strcpy (ctx->temp_base, "openssl_config_temp");
-  strcpy (ctx->init_parameters_path, "./CA-setup.json");
+  strcpy (ctx->init_parameters_path, "./cert-whisper.json");
   strcpy (ctx->openssl_config_path, "/opt/tester/etc/cwCA/openssl.cnf");
+  strcpy (ctx->cert_name, "user");
+  strcpy (ctx->ca_specs_1, "usr_cert");
 
-  strcpy (ctx->CA_days, "32");
-  strcpy (ctx->subject, "/C=US/ST=California/L=Oakland/O=HellaBadCA/OU=LCBO/CN=ca");
   if (argc > 1)
     strcpy (ctx->init_parameters_path, argv [1]);
 
-  fprintf (stderr, "Cert Whisperer - configure and generate Certificate Authority (openssl) - %s\n",
+  fprintf (stderr, "cert-whisper: manage certificates - %s\n",
     CW_VERSION);
   fprintf (stderr, "Init Parameters: %s\n", ctx->init_parameters_path);
-  fprintf (stderr, "OpenSSL Config: %s\n", ctx->openssl_config_path);
-  fprintf (stderr, "Options:");
-#ifdef SCRUB
-  fprintf (stderr, "+SCRUB");
-#endif
-#ifdef RECREATE
-  fprintf (stderr, "+RECREATE");
-#endif
-  fprintf (stderr, "\n");
-  fprintf (stderr, "Template: %s\n", ctx->CA_template);
+  fprintf (stderr, " OpenSSL Config: %s\n", ctx->openssl_config_path);
+  fprintf (stderr, "        Options:");
+
   status = STRM_PARMFILE;
   found_field = 0;
 
@@ -173,100 +154,52 @@ int
     fprintf (stderr, "Configurator Report:\n");
     fprintf (stderr, "CA Directory: %s\n",
       ctx->CA_directory);
-    fprintf (stderr, "  CA Subject: %s\n",
+    fprintf (stderr, "     Subject: %s\n",
       ctx->subject);
   };
-#ifdef RECREATE
   if (status EQUALS STCW_OK)
   {
-    fprintf (stderr, "Configuring CA...\n");
-    status = setup_CA (ctx);
 
-  };
-#endif
-  if (status EQUALS STCW_OK)
-  {
-    sprintf (command,
-"openssl ca -config %s -create_serial -out %s/cacert.pem -days %s -batch -keyfile %s/private/cakey.pem -selfsign -extensions v3_ca -infiles %s/careq.pem",
-      ctx->openssl_config_path, ctx->CA_directory, ctx->CA_days, ctx->CA_directory, ctx->CA_directory);
+    switch (ctx->cert_command)
+    {
+    case CW_CMD_ISSUE_CERT:
+      option_encrypt = "";
+      if (!(ctx->option_pw_privkey))
+      {
+        option_encrypt = "-nodes";
+      }
+      else
+      {
+        status = STCW_UNIMP;
+      };
+      sprintf (command,
+"openssl req -config %s %s -subj \"%s\" -new -keyout %s_key.pem -out %s_req.pem",
+        ctx->openssl_config_path, option_encrypt, ctx->subject,
+        ctx->cert_name, ctx->cert_name);
+      if (ctx->verbosity > 3)
+        fprintf (stderr, "Command is: %s\n", command);
+      system (command);
+      break;
 
-    fprintf (stderr, "Command is: %s\n", command);
-    system (command);
+    case CW_CMD_SIGN:
+      sprintf (command,
+"openssl ca -config %s -batch -key %s_key.pem -extensions %s -infiles %s_req.pem",
+        ctx->openssl_config_path, ctx->cert_name, ctx->ca_specs_1, ctx->cert_name);
+      if (ctx->verbosity > 3)
+        fprintf (stderr, "Command is: %s\n", command);
+      system (command);
+      break;
+
+    default:
+      fprintf (stderr, "Unknown cert-whisperer command (%d)\n",
+        ctx->cert_command);
+      status = STCW_UNK_CMD;
+      break;
+    };
   };
   if (status != STCW_OK)
     fprintf (stderr, "Returning status %d\n", status);
   return (status);
 
-} /* configure_ca */
-
-
-int
-  setup_CA
-    (CW_CONTEXT
-      *ctx)
-
-{ /* setup_CA */
-
-  char
-    command [1024];
-  char
-    *option_encrypt;
-  int
-    status;
-
-
-  status = STCW_OK;
-#ifdef SCRUB
-    sprintf (command, "rm -rvf %s\n",
-      ctx->CA_directory);
-    system (command);
-#endif
-
-  status = setup_config (ctx);
-  if (status EQUALS STCW_OK)
-  {
-  sprintf (command, "mkdir -p %s/certs\n",
-    ctx->CA_directory);
-  system (command);
-  sprintf (command, "mkdir -p %s/certs\n",
-    ctx->CA_directory);
-  system (command);
-  sprintf (command, "mkdir -p %s/crl\n",
-    ctx->CA_directory);
-  system (command);
-  sprintf (command, "mkdir -p %s/newcerts\n",
-    ctx->CA_directory);
-  system (command);
-  sprintf (command, "mkdir -p %s/private\n",
-    ctx->CA_directory);
-  system (command);
-  sprintf (command,"touch %s/index.txt;echo \"01\" >%s/crlnumber",
-    ctx->CA_directory, ctx->CA_directory);
-  system (command);
-  };
-
-  if (status EQUALS STCW_OK)
-  {
-    if (!(ctx->option_pw_privkey))
-    {
-      option_encrypt = "-nodes";
-    }
-    else
-    {
-      status = STCW_UNIMP;
-    };
-  };
-  if (status EQUALS STCW_OK)
-  {
-    sprintf (command,
-"openssl req -config %s %s -subj \"%s\" -new -keyout %s/private/cakey.pem -out %s/careq.pem",
-      ctx->openssl_config_path, option_encrypt, ctx->subject,
-      ctx->CA_directory, ctx->CA_directory);
-    fprintf (stderr, "Command is: %s\n", command);
-    system (command);
-  };
-
-  return (status);
-
-} /* setup_CA */
+} /* main for cert-whisper */
 

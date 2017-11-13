@@ -1,0 +1,8 @@
+{
+  "download" : "ca",
+  "cert-command" : "issue",
+  "cert-name" : "user",
+  "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=User1 Operations1",
+  "#" : "_the-end"
+}
+

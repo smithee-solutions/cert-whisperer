@@ -1,17 +1,19 @@
 Create a config file
 
-Create a JSON file with configuration details.  The default name
-is CA-setup.json in the current directory.
+Create a JSON file with configuration details.
 
-run blah
+run configure-CA or cert-whisper
 
 
-Configuration File:
+Configuration File Parameters:
 
+ca-template - template file used to create openssl config file
+cert-command - command performed by cert-whisper.  "issue" or "sign"
+cert-name    - name used for certificate files
 download - directory in which to create OpenSSL CA files.  Value is pathname.
-nopw - Don't set private key password.  No value.
-privkey - Pass phrase for private key.
-subject - subjectName of CA
+nopw     - Don't set private key password.  No value.
+privkey  - Pass phrase for private key.
+subject  - subjectName of cert being issued (might be CA)
 
 // days 32
 // SCRUB
@@ -23,6 +25,7 @@ Examples
   "download" = "test",
   "nopw"
 }
+
 {
   "download" = "test",
   "privkey" = "password"

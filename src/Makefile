@@ -15,12 +15,12 @@
 # limitations under the License.
 
 TROOT=opt/tester
-PROGS=configure-CA
+PROGS=cert-whisper configure-CA
 SCRIPTS=openssl-TEMPLATE_1.cnf
 LD=clang
 CC=clang
 LDFLAGS=-g
-CFLAGS=-c -g -Wall -Werror
+CFLAGS=-c -g -I../include -Wall -Werror
 
 
 all:	${PROGS}
@@ -34,9 +34,18 @@ build:	all
 	mkdir -p ${TROOT}/etc/cwCA
 	cp ${SCRIPTS} ${TROOT}/etc/cwCA
 
-configure-CA:	configure-CA.o Makefile
-	${LD} -o configure-CA configure-CA.o ${LDFLAGS} -ljansson
+cert-whisper:	cert-whisper.o cw-utils.o Makefile
+	${LD} -o cert-whisper cert-whisper.o cw-utils.o ${LDFLAGS} -ljansson
 
-configure-CA.o:	configure-CA.c
+cert-whisper.o:	cert-whisper.c ../include/cert-whisperer.h
+	${CC} ${CFLAGS} cert-whisper.c
+
+configure-CA:	configure-CA.o cw-utils.o Makefile
+	${LD} -o configure-CA configure-CA.o cw-utils.o ${LDFLAGS} -ljansson
+
+configure-CA.o:	configure-CA.c ../include/cert-whisperer.h
 	${CC} ${CFLAGS} configure-CA.c
+
+cw-utils.o:	cw-utils.c ../include/cert-whisperer.h
+	${CC} ${CFLAGS} cw-utils.c
 
