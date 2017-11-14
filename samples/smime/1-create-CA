@@ -1,0 +1,6 @@
+#!/bin/bash
+set -x
+TROOT=opt/tester
+TBIN=/${TROOT}/bin
+${TBIN}/configure-CA cw-lcbo.json
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+set -x
+TROOT=opt/tester
+TBIN=/${TROOT}/bin
+${TBIN}/cert-whisper cw-smime-sign.json
+

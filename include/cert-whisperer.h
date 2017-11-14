@@ -55,6 +55,8 @@ typedef struct cw_context
     temp_base [1024];
   char
     subject [1024];
+  char
+    san_email [1024];
   int
     option_pw_privkey;
 } CW_CONTEXT;

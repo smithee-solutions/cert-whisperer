@@ -93,6 +93,21 @@ int
     strcpy (ctx->cert_name, json_string_value (value));
   };
 
+  // extensions is the (file) name used for this certificate
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy (field, "extensions");
+    value = json_object_get (ctx->root, field);
+    if (!json_is_string (value))
+      found_field = 0;
+  };
+  if (found_field)
+  {
+    strcpy (ctx->ca_specs_1, json_string_value (value));
+  };
+
   // nopw causes no password; pw= causes passphrase
 
   if (status EQUALS STCW_OK)
@@ -106,6 +121,21 @@ int
   if (found_field)
   {
     ctx->option_pw_privkey = 0;
+  };
+
+  // san-email is the subjectAltName RFC822name (we allow only one)
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy (field, "san-email");
+    value = json_object_get (ctx->root, field);
+    if (!json_is_string (value))
+      found_field = 0;
+  };
+  if (found_field)
+  {
+    strcpy (ctx->san_email, json_string_value (value));
   };
 
   // privkey is the private key password
@@ -153,16 +183,33 @@ int
 
   char
     command [1024];
+  char
+    last_temp [1024];
+  char
+    previous_temp [1024];
   int
     status;
 
 
   status = STCW_OK;
+  strcpy (last_temp, template_name (ctx, "1"));
   sprintf (command, "sed -e \"s/CW_DIRECTORY/%s/g\" <%s >%s",
-    ctx->CA_directory, ctx->CA_template, template_name (ctx, "1"));
+    ctx->CA_directory, ctx->CA_template, last_temp);
+  if (ctx->verbosity > 3)
+    fprintf (stderr, "Cmd: %s\n", command);
   system (command);
+  if (strlen (ctx->san_email) > 0)
+  {
+    strcpy (previous_temp, last_temp);
+    strcpy (last_temp, template_name (ctx, "2"));
+    sprintf (command, "sed -e \"s/CW_SAN_EMAIL/%s/g\" <%s >%s",
+      ctx->san_email, previous_temp, last_temp);
+    system (command);
+  };
   sprintf (command, "cp %s %s",
-    template_name (ctx, "1"), ctx->openssl_config_path);
+    last_temp, ctx->openssl_config_path);
+  if (ctx->verbosity > 3)
+    fprintf (stderr, "Cmd: %s\n", command);
   system (command);
   return (status);
 

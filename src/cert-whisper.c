@@ -136,15 +136,25 @@ int
 
   if (status EQUALS STCW_OK)
   {
-    fprintf (stderr, "Configurator Report:\n");
-    fprintf (stderr, "CA Directory: %s\n",
+    fprintf (stderr, "Configuration.\n");
+    fprintf (stderr,
+"   CA Directory: %s\n",
       ctx->CA_directory);
-    fprintf (stderr, "     Subject: %s\n",
+    fprintf (stderr,
+"        Subject: %s\n",
       ctx->subject);
+    fprintf (stderr,
+"     Extensions: %s\n",
+      ctx->ca_specs_1);
+    if (strlen (ctx->san_email) > 0)
+      fprintf (stderr,
+" SAN RFC822Name: %s\n",
+        ctx->san_email);
   };
   if (status EQUALS STCW_OK)
+    status = setup_config (ctx);
+  if (status EQUALS STCW_OK)
   {
-
     switch (ctx->cert_command)
     {
     case CW_CMD_ISSUE_CERT:

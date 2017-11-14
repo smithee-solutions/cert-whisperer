@@ -1,0 +1,12 @@
+{
+  "cert-command" : "sign",
+  "ca-template" : "./LCBO-TEMPLATE.cnf",
+  "cert-name" : "opsuser1",
+  "download" : "LCBO-CA",
+  "extensions" : "usr_smime_cert",
+  "san-email" : "opsuser1@example.com",
+
+  "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=user1 operations1",
+  "#" : "_the-end"
+}
+
