@@ -5,6 +5,7 @@
   "san-email" : "opsuser1@example.com",
   "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=user1 operations1",
   "ca-template" : "./LCBO-TEMPLATE.cnf",
+  "extensions" : "usr_smime_cert",
   "#" : "_the-end"
 }
 

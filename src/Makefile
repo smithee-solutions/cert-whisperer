@@ -15,7 +15,7 @@
 # limitations under the License.
 
 TROOT=opt/tester
-PROGS=cert-whisper configure-CA
+PROGS=cert-herder cert-whisper configure-CA
 SCRIPTS=openssl-TEMPLATE_1.cnf
 LD=clang
 CC=clang
@@ -33,6 +33,12 @@ build:	all
 	cp ${PROGS} ${TROOT}/bin
 	mkdir -p ${TROOT}/etc/cwCA
 	cp ${SCRIPTS} ${TROOT}/etc/cwCA
+
+cert-herder:	cert-herder.o Makefile
+	${LD} -o cert-herder cert-herder.o ${LDFLAGS} -ljansson
+
+cert-herder.o:	cert-herder.c ../include/cert-whisperer.h
+	${CC} ${CFLAGS} cert-herder.c
 
 cert-whisper:	cert-whisper.o cw-signer.o cw-utils.o Makefile
 	${LD} -o cert-whisper cert-whisper.o cw-signer.o cw-utils.o ${LDFLAGS} -ljansson

@@ -4,4 +4,5 @@ need to do smime with outlook on office 365, etc.
 runs 1-x to create CA
 2-x to create cert request for user
 3-x to sign cert for user
+4-x to create additional (ios) certs
 

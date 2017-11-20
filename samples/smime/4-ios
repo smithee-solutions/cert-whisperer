@@ -1,0 +1,12 @@
+#!/bin/bash
+set -x
+CERTNAME=iostest
+TROOT=opt/tester
+TBIN=/${TROOT}/bin
+./cert-herder --certname=${CERTNAME} \
+  --email=opsuser1@test.b70.net "--subject=/C=DE/ST=Berlin/L=Berlin/O=Example Organization/OU=Test/CN=User Operations1"
+${TBIN}/cert-whisper 1.json
+${TBIN}/cert-whisper 2.json
+cat ${CERTNAME}_key.pem ${CERTNAME}_cert.pem >keypair_bundle
+openssl pkcs12 -nodes -export -in keypair_bundle -out ${CERTNAME}.p12 -name smime-keys -password pass:password
+
