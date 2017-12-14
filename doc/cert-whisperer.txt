@@ -31,3 +31,6 @@ Examples
   "privkey" = "password"
 }
 
+
+ecc curves can be used too see sample-ecc
+

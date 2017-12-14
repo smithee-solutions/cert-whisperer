@@ -8,7 +8,7 @@
   assumes cert-whisper.json in current directory as default.
 
 
-  Copyright 2017 Smithee Solutions LLC
+  (C)Copyright 2017 Smithee Solutions LLC
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.

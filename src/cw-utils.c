@@ -1,7 +1,7 @@
 /*
   cw-utils - utilities for cert-whisperer
 
-  Copyright 2017 Smithee Solutions LLC
+  (C)Copyright 2017 Smithee Solutions LLC
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 #include <jansson.h>
 
 #include <cert-whisperer.h>
+
 
 int parse_config(CW_CONTEXT *ctx)
 
@@ -177,6 +178,7 @@ int parse_config(CW_CONTEXT *ctx)
 
 } /* parse_config */
 
+
 int setup_config(CW_CONTEXT *ctx)
 
 { /* setup_config */
@@ -208,6 +210,85 @@ int setup_config(CW_CONTEXT *ctx)
   return (status);
 
 } /* setup_config */
+
+
+int setup_CA(CW_CONTEXT *ctx)
+
+{ /* setup_CA */
+
+  char command[1024];
+  char *option_encrypt;
+  int status;
+
+  status = STCW_OK;
+#ifdef SCRUB
+  sprintf(command, "rm -rvf %s\n", ctx->CA_directory);
+  system(command);
+#endif
+
+  status = setup_config(ctx);
+  if (status EQUALS STCW_OK)
+  {
+    sprintf(command, "mkdir -p %s/certs\n", ctx->CA_directory);
+    system(command);
+    sprintf(command, "mkdir -p %s/certs\n", ctx->CA_directory);
+    system(command);
+    sprintf(command, "mkdir -p %s/crl\n", ctx->CA_directory);
+    system(command);
+    sprintf(command, "mkdir -p %s/newcerts\n", ctx->CA_directory);
+    system(command);
+    sprintf(command, "mkdir -p %s/private\n", ctx->CA_directory);
+    system(command);
+    sprintf(command, "touch %s/index.txt;echo \"01\" >%s/crlnumber",
+            ctx->CA_directory, ctx->CA_directory);
+    system(command);
+  };
+
+  if (status EQUALS STCW_OK)
+  {
+    if (!(ctx->option_pw_privkey))
+    {
+      option_encrypt = "-nodes";
+    } else
+    { status = STCW_UNIMP; };
+  };
+  if (status EQUALS STCW_OK)
+  {
+    if (strncmp (ctx->pubkey_class, "ecc", 3) EQUALS 0)
+    {
+      sprintf(command,
+             "openssl ecparam -out %s/private/cakey.pem -name %s -genkey",
+             ctx->CA_directory, ctx->ecc_curve_name);
+      if (ctx->verbosity > 3)
+      {
+        fprintf(stderr, "Command is: %s\n", command);
+        system(command);
+      };
+      sprintf(command,
+              "openssl req -config %s %s -subj \"%s\" -new -key %s/private/cakey.pem "
+              "-out %s/careq.pem",
+               ctx->openssl_config_path, option_encrypt, ctx->subject,
+              ctx->CA_directory, ctx->CA_directory);
+      if (ctx->verbosity > 3)
+        fprintf(stderr, "Command is: %s\n", command);
+      system(command);
+    }
+    else
+    {
+      sprintf(command,
+             "openssl req -config %s %s -subj \"%s\" -new -keyout "
+             "%s/private/cakey.pem -out %s/careq.pem",
+             ctx->openssl_config_path, option_encrypt, ctx->subject,
+             ctx->CA_directory, ctx->CA_directory);
+      fprintf(stderr, "Command is: %s\n", command);
+      system(command);
+    };
+  };
+
+  return (status);
+
+} /* setup_CA */
+
 
 char *template_name(CW_CONTEXT *ctx, char *suffix)
 

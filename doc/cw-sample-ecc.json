@@ -1,0 +1,10 @@
+{
+  "download" : "LCBO-CA",
+  "subject" : "/C=US/ST=California/L=Oakland/O=Smithee Solutions/OU=hellaBadCertificates/CN=CA",
+  "ca-template" : "./TEMPLATE.cnf",
+  "pubkey_class" : "ecc",
+  "ecc_curve_name" : "sect571r1",
+  "1cc_curve_name" : "secp384r1",
+  "#" : "_the-end"
+}
+

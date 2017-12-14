@@ -1,7 +1,7 @@
 /*
   cw-signer - signer (i.e CA engine) routines
 
-  Copyright 2017 Smithee Solutions LLC
+  (C)Copyright 2017 Smithee Solutions LLC
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
