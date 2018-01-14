@@ -16,7 +16,7 @@
   limitations under the License.
 */
 
-#define CW_VERSION "0.00-Build-3"
+#define CW_VERSION "0.10-Build-1"
 
 #define EQUALS ==
 

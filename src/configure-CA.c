@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
   strcpy(ctx->init_parameters_path, "./CA-setup.json");
   strcpy(ctx->openssl_config_path, "/opt/tester/etc/cwCA/openssl.cnf");
 
-  strcpy(ctx->CA_days, "32");
+//  strcpy(ctx->CA_days, "32");
   strcpy(ctx->subject,
          "/C=US/ST=California/L=Oakland/O=HellaBadCA/OU=LCBO/CN=ca");
   if (argc > 1)
