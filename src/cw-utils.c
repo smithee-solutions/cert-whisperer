@@ -36,6 +36,19 @@ int parse_config(CW_CONTEXT *ctx)
   status = STCW_OK;
   found_field = 0;
 
+  // ca-lifetime is CA duration in days
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy(field, "ca-lifetime");
+    value = json_object_get(ctx->root, field);
+    if (!json_is_string(value))
+      found_field = 0;
+  };
+  if (found_field)
+  { strcpy(ctx->CA_days, json_string_value(value)); };
+
   // ca-template is the template used to create the config file
 
   if (status EQUALS STCW_OK)
