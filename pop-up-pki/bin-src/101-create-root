@@ -1,0 +1,38 @@
+#!/bin/bash
+set -x
+. ../bin/setup_Pop-up-PKI
+. ../bin/PopUpPKI-params
+DN_1="-subj /C=US/ST=California/L=Berkeley/DC=COM/DC=EXAMPLE/O=LCBO/OU=Test/CN=${CA_NAME}"
+
+CA_DN=${DN_1}
+
+echo SSLEAY_CONFIG is now ${SSLEAY_CONFIG}
+
+echo CA Directory is ${CA_DIR}
+echo CA DN is ${CA_DN}
+mkdir -p ${CA_DIR}
+
+sed -e "s/TEMPLATE_CA/${CA_NAME}/g" <${ETC}/Pop-up-PKI/template-A-openssl.cnf >template-openssl.cnf
+cat template-openssl.cnf >${CA_DIR}/openssl.cnf
+DUT_DN=${DN_1} SSLEAY_CONFIG=${SSLEAY_CONFIG} CA_DIR=${CA_DIR} CA_DAYS=${CA_DAYS} \
+ ${BIN}/CA.pl -newca-nodes
+mkdir -p ${PKI_OUT}/cdp-1
+cp ${CA_DIR}/cacert.pem ${PKI_OUT}/${CA_NAME}.pem
+${OPENSSL} x509 -inform PEM -in ${PKI_OUT}/${CA_NAME}.pem \
+  -outform DER -out ${PKI_OUT}/${CA_NAME}.der
+
+# provision the CRL Distribution Point
+mkdir -p ${PKI_OUT}/cdp-1/${CA_NAME}
+cp ${ETC}/Pop-up-PKI/template-A-CPS.txt ${CA_DIR}/${CA_NAME}_cps.txt
+
+# ... and then generate an initial CRL
+${OPENSSL} \
+  ca -gencrl -crldays ${CRL_DAYS} -config ${CA_DIR}/openssl.cnf \
+  -out ${CA_DIR}/current_${CA_NAME}_crl.pem 
+cp ${CA_DIR}/current_${CA_NAME}_crl.pem \
+  ${PKI_OUT}
+echo populating \
+  ${PKI_OUT}/cdp-1/${CA_NAME}
+cp ${CA_DIR}/current_${CA_NAME}_crl.pem \
+  ${PKI_OUT}/cdp-1/${CA_NAME}/current_crl.pem 
+

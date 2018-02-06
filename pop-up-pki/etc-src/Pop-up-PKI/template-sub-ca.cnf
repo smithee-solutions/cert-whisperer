@@ -1,0 +1,8 @@
+
+[ usr_cert ]
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:TRUE
+crlDistributionPoints = URI:http://cdp.example.com/crl-1A.pem
+keyUsage = critical, digitalSignature, keyEncipherment
+subjectKeyIdentifier=hash
+

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+. ./local_parameters
+
+CA_DAYS=32
+CERT_DAYS=7
+CRL_DAYS=8
+
+PKI_OUT=./pki_outbox
+OPENSSL=/tester/current/bin/openssl
+SSLEAY_CONFIG="-config ./${CA_DIR}/openssl.cnf"
+
+

@@ -1,0 +1,24 @@
+#!/bin/bash
+set -x
+. ../bin/setup_Pop-up-PKI
+. ../bin/PopUpPKI-params
+DEVICE_1=osdp-cp.example.com
+DN_1="-subj /C=US/ST=California/L=Berkeley/DC=COM/DC=EXAMPLE/O=LCBO/OU=Test/CN=${DEVICE_1}"
+
+sed -e "s/TEMPLATE_CA/${CA_NAME}/g" <${ETC}/Pop-up-PKI/template-A-openssl.cnf >template-openssl.cnf
+sed -e "s/TEMPLATE_CA/${CA_NAME}/g" <${ETC}/Pop-up-PKI/template-device.cnf >tmp-1.cnf
+cat template-openssl.cnf tmp-1.cnf >${CA_DIR}/openssl.cnf
+
+DUT_DN=${DN_1} SSLEAY_CONFIG=${SSLEAY_CONFIG} CA_DIR=${CA_DIR} CA_DAYS=${CA_DAYS} CERT_DAYS=${CERT_DAYS} \
+  ${BIN}/CA.pl -newreq-nodes-param
+DUT_DN=${DN_1} SSLEAY_CONFIG=${SSLEAY_CONFIG} CA_DIR=${CA_DIR} CA_DAYS=${CA_DAYS} CERT_DAYS=${CERT_DAYS} \
+  ${BIN}/CA.pl -sign
+cp newcert.pem ${PKI_OUT}/${DEVICE_1}_cert.pem
+cp newreq.pem ${PKI_OUT}/${DEVICE_1}_req.pem
+cp newkey.pem ${PKI_OUT}/${DEVICE_1}_key.pem
+
+# and create the pkcs-12 too
+cat ${PKI_OUT}/${DEVICE_1}_key.pem ${PKI_OUT}/${DEVICE_1}_cert.pem >keypair_bundle
+${OPENSSL} pkcs12 -nodes -export \
+  -out ${PKI_OUT}/${DEVICE_1}.p12 -in keypair_bundle -name ${DEVICE_1}-keypair -password pass:password
+

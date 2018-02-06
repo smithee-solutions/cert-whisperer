@@ -1,0 +1,22 @@
+#!/bin/bash
+set -x
+. ../bin/setup_Pop-up-PKI
+. ../bin/PopUpPKI-params
+USERNAME_1=User2\\\ Operations2
+USEREMAIL_1=opsuser2@test.b70.net
+DN_1="-subj /C=US/ST=California/L=Berkeley/DC=COM/DC=EXAMPLE/O=LCBO/OU=Test/CN=${USERNAME_1}"
+
+sed -e "s/TEMPLATE_CA/${CA_NAME}/g" <${ETC}/Pop-up-PKI/template-A-usr_cert.cnf >tmp-1.cnf
+sed -e "s/T_EMAIL/${USEREMAIL_1}/" <tmp-1.cnf >tmp-2.cnf
+cat template-openssl.cnf tmp-2.cnf >${CA_DIR}/openssl.cnf
+DUT_DN=${DN_1} SSLEAY_CONFIG=${SSLEAY_CONFIG} CA_DIR=${CA_DIR} CA_DAYS=${CA_DAYS} CERT_DAYS=${CERT_DAYS} \
+  ${BIN}/CA.pl -newreq-nodes-param
+DUT_DN=${DN_1} SSLEAY_CONFIG=${SSLEAY_CONFIG} CA_DIR=${CA_DIR} CA_DAYS=${CA_DAYS} CERT_DAYS=${CERT_DAYS} \
+  ${BIN}/CA.pl -sign
+cp newcert.pem ${PKI_OUT}/${USEREMAIL_1}_cert.pem
+cp newreq.pem ${PKI_OUT}/${USEREMAIL_1}_req.pem
+cp newkey.pem ${PKI_OUT}/${USEREMAIL_1}_key.pem
+cat ${PKI_OUT}/${USEREMAIL_1}_key.pem ${PKI_OUT}/${USEREMAIL_1}_cert.pem >keypair_bundle
+${OPENSSL} pkcs12 -nodes -export \
+  -out ${PKI_OUT}/${USEREMAIL_1}.p12 -in keypair_bundle -name ${USEREMAIL_1}-keypair -password pass:password
+

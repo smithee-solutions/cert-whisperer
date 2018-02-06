@@ -1,0 +1,42 @@
+#!/bin/bash
+set -x
+
+# clean up
+rm -rvf keypair_bundle LCBO* list-* *pem pki_outbox *cnf
+
+# init the level 2 CA structure
+cp b local_parameters; . ./local_parameters; 101-create-root
+cp c local_parameters; . ./local_parameters; 101-create-root
+
+# init the level 1 CA structure
+cp a local_parameters
+. ./local_parameters
+101-create-root
+102-create-sub-ca
+cp newkey.pem level_2A_key.pem
+cp newcert.pem level_2A_cert.pem
+cp newkey.pem level_2B_key.pem
+cp newcert.pem level_2B_cert.pem
+
+# deploy the level 2A CA's key and cert into it's own CA environment
+# 2A is for smime
+cp b local_parameters
+. ./local_parameters
+cp level_2A_cert.pem ${CA_DIR}/cacert.pem
+cp level_2A_key.pem ${CA_DIR}/private/cakey.pem
+grep 2016 ${CA_DIR}/*openssl*
+201-create-first-user
+grep 2016 ${CA_DIR}/*openssl*
+202-create-users-02_thru_02
+grep 2016 ${CA_DIR}/*openssl*
+
+# deploy the level 2B CA's key and cert into it's own CA environment
+# 2B is for devices
+cp c local_parameters
+. ./local_parameters
+cp level_2B_cert.pem ${CA_DIR}/cacert.pem
+cp level_2B_key.pem ${CA_DIR}/private/cakey.pem
+grep 2016 ${CA_DIR}/*openssl*
+301-create-first-device
+302-create-devices-2_thru_2
+

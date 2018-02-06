@@ -1,0 +1,7 @@
+#!/bin/bash
+USERNAME_1=User1\\\ Operations1
+USEREMAIL_1=test@test.b70.net
+DN_1="-subj /C=US/ST=California/L=Berkeley/DC=COM/DC=EXAMPLE/O=LCBO/OU=Test/CN=${USERNAME_1}"
+BIN=../bin
+ETC=../etc
+

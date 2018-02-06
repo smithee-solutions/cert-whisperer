@@ -1,0 +1,10 @@
+
+[ usr_cert ]
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+crlDistributionPoints = URI:http://cdp.example.com/crl-2A.pem
+extendedKeyUsage = critical,emailProtection
+keyUsage = critical, digitalSignature, keyEncipherment
+subjectAltName=email:USEREMAIL_1
+subjectKeyIdentifier=hash
+
