@@ -16,7 +16,7 @@
   limitations under the License.
 */
 
-#define CW_VERSION "0.10-Build-1"
+#define CW_VERSION "0.20-Build-1"
 
 #define EQUALS ==
 
@@ -33,6 +33,7 @@ typedef struct cw_context {
   char download_file[1024];
   char CA_directory[1024];
   char CA_days[1024];
+  char certificate_days[1024];
   char openssl_config_path[1024];
   char temp_prefix[1024];
   char private_key_passphrase[1024];
@@ -43,6 +44,7 @@ typedef struct cw_context {
   int option_pw_privkey;
   char pubkey_class[1024];
   char ecc_curve_name[1024];
+  char basename [1024];
 } CW_CONTEXT;
 
 #define STCW_OK (0)

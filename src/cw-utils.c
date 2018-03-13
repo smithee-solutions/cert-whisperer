@@ -1,7 +1,7 @@
 /*
   cw-utils - utilities for cert-whisperer
 
-  (C)Copyright 2017 Smithee Solutions LLC
+  (C)Copyright 2017-2018 Smithee Solutions LLC
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -35,6 +35,36 @@ int parse_config(CW_CONTEXT *ctx)
 
   status = STCW_OK;
   found_field = 0;
+
+  // verbosity
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy(field, "verbosity");
+    value = json_object_get(ctx->root, field);
+    if (!json_is_string(value))
+      found_field = 0;
+  };
+  if (found_field)
+  {
+    int i;
+    sscanf (json_string_value(value), "%d", &i);
+    ctx->verbosity = i;
+  };
+
+  // basename is host name (TLD and name)
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy(field, "basename");
+    value = json_object_get(ctx->root, field);
+    if (!json_is_string(value))
+      found_field = 0;
+  };
+  if (found_field)
+  { strcpy(ctx->basename, json_string_value(value)); };
 
   // ca-lifetime is CA duration in days
 
@@ -79,6 +109,19 @@ int parse_config(CW_CONTEXT *ctx)
     if (0 EQUALS strcmp("sign", json_string_value(value)))
       ctx->cert_command = CW_CMD_SIGN;
   };
+
+  // cert-lifetime is certificate lifetime in days
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy(field, "cert-lifetime");
+    value = json_object_get(ctx->root, field);
+    if (!json_is_string(value))
+      found_field = 0;
+  };
+  if (found_field)
+  { strcpy(ctx->certificate_days, json_string_value(value)); };
 
   // cert-name is the (file) name used for this certificate
 
@@ -203,11 +246,20 @@ int setup_config(CW_CONTEXT *ctx)
 
   status = STCW_OK;
   strcpy(last_temp, template_name(ctx, "1"));
+printf("1 CA_directory now %s\n", ctx->CA_directory);
   sprintf(command, "sed -e \"s/CW_DIRECTORY/%s/g\" <%s >%s", ctx->CA_directory,
           ctx->CA_template, last_temp);
   if (ctx->verbosity > 3)
     fprintf(stderr, "Cmd: %s\n", command);
   system(command);
+  if (strlen(ctx->basename) > 0)
+  {
+    strcpy(previous_temp, last_temp);
+    strcpy(last_temp, template_name(ctx, "3"));
+    sprintf(command, "sed -e \"s/CW_BASE_NAME/%s/g\" <%s >%s", ctx->basename,
+            previous_temp, last_temp);
+    system(command);
+  };
   if (strlen(ctx->san_email) > 0)
   {
     strcpy(previous_temp, last_temp);
@@ -252,8 +304,8 @@ int setup_CA(CW_CONTEXT *ctx)
     system(command);
     sprintf(command, "mkdir -p %s/private\n", ctx->CA_directory);
     system(command);
-    sprintf(command, "touch %s/index.txt;echo \"01\" >%s/crlnumber",
-            ctx->CA_directory, ctx->CA_directory);
+    sprintf(command, "touch %s/index.txt;echo \"01\" >%s/crlnumber;touch %s/index.txt.attr",
+            ctx->CA_directory, ctx->CA_directory, ctx->CA_directory);
     system(command);
   };
 

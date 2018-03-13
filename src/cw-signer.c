@@ -17,6 +17,7 @@
 */
 
 #include <stdio.h>
+#include <string.h>
 
 #include <jansson.h>
 
@@ -27,13 +28,16 @@ int cw_sign(CW_CONTEXT *ctx)
 { /* cw_sign */
 
   char command[1024];
+  char days_option [1024];
   int status;
 
   status = STCW_OK;
+  days_option [0] = 0;
+  if (strlen(ctx->certificate_days) > 0)
+    sprintf (days_option, " -days %s", ctx->certificate_days);
   sprintf(command,
-          "openssl ca -config %s -batch -key %s_key.pem -extensions %s -out "
-          "%s_cert.pem -infiles %s_req.pem",
-          ctx->openssl_config_path, ctx->cert_name, ctx->ca_specs_1,
+          "openssl ca -config %s -batch %s -key %s_key.pem -extensions %s -out %s_cert.pem -infiles %s_req.pem",
+          ctx->openssl_config_path, days_option, ctx->cert_name, ctx->ca_specs_1,
           ctx->cert_name, ctx->cert_name);
   if (ctx->verbosity > 3)
     fprintf(stderr, "Command is: %s\n", command);
