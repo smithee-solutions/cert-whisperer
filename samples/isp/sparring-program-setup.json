@@ -1,0 +1,9 @@
+{
+  "ca-lifetime" : "365",
+  "cert-lifetime" : "365",
+  "download" : "sparring-program",
+  "subject" : "/C=US/ST=California/L=Berkeley/O=example.com/OU=LCBO/CN=cert-migration-ca",
+  "ca-template" : "./sparring-program-TEMPLATE.cnf",
+  "#" : "_the-end"
+}
+

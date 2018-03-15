@@ -1,0 +1,13 @@
+#!/bin/bash
+set -x
+TROOT=opt/tester
+TBIN=/${TROOT}/bin
+echo "               Base Name:" $2
+echo "Email Address (required):" $3
+echo "     Subject name suffix:" $4
+sed -e "s/CW_BASENAME/$2/g" <bwga-server-certreq.json >tmp1.json
+sed -e "s/CW_EMAIL/$3/g" <tmp1.json >tmp2.json
+sed -e "s/CW_SUBJ_SUFFIX/$4/g" <tmp2.json >tmp3.json
+${TBIN}/cert-whisper tmp3.json
+
+

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -x
+ISP=sparring-program
+rm -rvf sparring-program
+./1-create-CA sparring-program-setup
+./2-create-cert sparring-program-server-certreq.json \
+  example.com "operations@example.com" \
+  "\/C=US\/ST=California\/L=Berkeley\/O=examle.com\/OU=LCBO"
+
