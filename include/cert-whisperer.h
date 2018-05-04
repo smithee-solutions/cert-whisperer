@@ -41,6 +41,7 @@ typedef struct cw_context {
   char temp_base[1024];
   char subject[1024];
   char san_email[1024];
+  char san_fqdn[1024];
   int option_pw_privkey;
   char pubkey_class[1024];
   char ecc_curve_name[1024];

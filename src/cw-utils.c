@@ -201,6 +201,19 @@ int parse_config(CW_CONTEXT *ctx)
   if (found_field)
   { strcpy(ctx->san_email, json_string_value(value)); };
 
+  // san-fqdn is the subjectAltName FQDN
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy(field, "san-fqdn");
+    value = json_object_get(ctx->root, field);
+    if (!json_is_string(value))
+      found_field = 0;
+  };
+  if (found_field)
+  { strcpy(ctx->san_fqdn, json_string_value(value)); };
+
   // privkey is the private key password
 
   if (status EQUALS STCW_OK)
@@ -266,6 +279,16 @@ printf("1 CA_directory now %s\n", ctx->CA_directory);
     strcpy(last_temp, template_name(ctx, "2"));
     sprintf(command, "sed -e \"s/CW_SAN_EMAIL/%s/g\" <%s >%s", ctx->san_email,
             previous_temp, last_temp);
+    system(command);
+  };
+  if (strlen(ctx->san_fqdn) > 0)
+  {
+    strcpy(previous_temp, last_temp);
+    strcpy(last_temp, template_name(ctx, "3"));
+    sprintf(command, "sed -e \"s/CW_SAN_FQDN/%s/g\" <%s >%s", ctx->san_fqdn,
+            previous_temp, last_temp);
+    if (ctx->verbosity > 3)
+      fprintf(stderr, "Cmd: %s\n", command);
     system(command);
   };
   sprintf(command, "cp %s %s", last_temp, ctx->openssl_config_path);
