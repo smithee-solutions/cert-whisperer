@@ -2,6 +2,7 @@
 set -x
 TROOT=opt/tester
 TBIN=/${TROOT}/bin
+cp ${TROOT}/etc/cwCA/openssl-TEMPLATE_1.cnf .
 ${TBIN}/cert-whisper cw-setup-keypair-create.json
 ${TBIN}/cert-whisper cw-sign.json
 

@@ -1,6 +1,7 @@
 {
   "download" : "test-ca-1",
   "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=test-ca-1",
+  "ca-lifetime" : "32",
   "#" : "_the-end"
 }
 

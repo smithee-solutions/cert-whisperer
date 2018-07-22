@@ -3,6 +3,7 @@
   "cert-command" : "issue",
   "cert-name" : "server200",
   "subject" : "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=server-200.example.com",
+  "ca-template" : "openssl-TEMPLATE_1.cnf",
   "#" : "_the-end"
 }
 
