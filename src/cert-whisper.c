@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 
 { /* main for cert-whisper */
 
+  char additional_options [1024];
   FILE *cmdf;
   CW_CONTEXT
   *ctx;
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
                ctx->cert_name, ctx->ecc_curve_name);
         if (ctx->verbosity > 3)
         {
-          fprintf(stderr, "Command is: %s\n", command);
+          fprintf(stderr, "Command (141)is: %s\n", command);
           system(command);
         };
         sprintf(command,
@@ -147,19 +148,28 @@ int main(int argc, char *argv[])
                 ctx->openssl_config_path, option_encrypt, ctx->subject,
                 ctx->cert_name, ctx->cert_name);
         if (ctx->verbosity > 3)
-          fprintf(stderr, "Command is: %s\n", command);
+          fprintf(stderr, "Command (150)is: %s\n", command);
         system(command);
       }
       else
       {
-        // not ECC
+        // it's an RSA key
+
+        // cook command line options.  if they wanted the private key encrypted, add that.
+
+        additional_options [0] = 0;
+        strcpy(additional_options, option_encrypt);
+
+        if (strlen(ctx->signing_options) > 0)
+          strcat (additional_options, ctx->signing_options);
+
         sprintf(command,
                 "openssl req -config %s %s -subj \"%s\" -new -keyout %s_key.pem "
                 "-out %s_req.pem",
-                ctx->openssl_config_path, option_encrypt, ctx->subject,
+                ctx->openssl_config_path, additional_options, ctx->subject,
                 ctx->cert_name, ctx->cert_name);
-        if (ctx->verbosity > 3)
-          fprintf(stderr, "Command is: %s\n", command);
+        fprintf(stderr, "Addl Options: %s\n", additional_options);
+        fprintf(stderr, "Full Command: %s\n", command);
         system(command);
       };
       break;

@@ -143,10 +143,10 @@ int main(int argc, char *argv[])
   if (status EQUALS STCW_OK)
   {
     sprintf(command,
-            "openssl ca -config %s -create_serial -out %s/cacert.pem -days %s "
+            "openssl ca -config %s -create_serial -out %s/cacert.pem -days %s %s "
             "-batch -keyfile %s/private/cakey.pem -selfsign -extensions v3_ca "
             "-infiles %s/careq.pem",
-            ctx->openssl_config_path, ctx->CA_directory, ctx->CA_days,
+            ctx->openssl_config_path, ctx->CA_directory, ctx->CA_days, ctx->signing_options,
             ctx->CA_directory, ctx->CA_directory);
 
     fprintf(stderr, "Command is: %s\n", command);

@@ -175,6 +175,22 @@ int parse_config(CW_CONTEXT *ctx)
   if (found_field)
   { ctx->option_pw_privkey = 0; };
 
+  // privkey is the private key password
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy(field, "privkey");
+    value = json_object_get(ctx->root, field);
+    if (!json_is_string(value))
+      found_field = 0;
+  };
+  if (found_field)
+  {
+    ctx->option_pw_privkey = 1;
+    strcpy(ctx->private_key_passphrase, json_string_value(value));
+  };
+
   // pubkey-class is rsa or ecc or ...
 
   if (status EQUALS STCW_OK)
@@ -214,20 +230,19 @@ int parse_config(CW_CONTEXT *ctx)
   if (found_field)
   { strcpy(ctx->san_fqdn, json_string_value(value)); };
 
-  // privkey is the private key password
+  // sigopts is a pass through to the REQ command to support PSS and other things.
 
   if (status EQUALS STCW_OK)
   {
     found_field = 1;
-    strcpy(field, "privkey");
-    value = json_object_get(ctx->root, field);
+    value = json_object_get(ctx->root, "sigopts");
     if (!json_is_string(value))
       found_field = 0;
-  };
-  if (found_field)
-  {
-    ctx->option_pw_privkey = 1;
-    strcpy(ctx->private_key_passphrase, json_string_value(value));
+    if (found_field)
+    {
+      strcpy(ctx->signing_options, json_string_value(value));
+      fprintf(stderr, "sigopts set to %s\n", ctx->signing_options);
+    };
   };
 
   // subject is the CA subjectName
@@ -304,6 +319,7 @@ int setup_CA(CW_CONTEXT *ctx)
 
 { /* setup_CA */
 
+  char additional_options [1024];
   char command[1024];
   char *option_encrypt;
   int status;
@@ -340,6 +356,9 @@ int setup_CA(CW_CONTEXT *ctx)
     } else
     { status = STCW_UNIMP; };
   };
+
+  // if it was an ECC key set up ec parameters
+
   if (status EQUALS STCW_OK)
   {
     if (strncmp (ctx->pubkey_class, "ecc", 3) EQUALS 0)
@@ -363,12 +382,22 @@ int setup_CA(CW_CONTEXT *ctx)
     }
     else
     {
+      // it's an RSA key
+
+      // cook command line options.  if they wanted the private key encrypted, add that.
+
+      additional_options [0] = 0;
+      strcpy(additional_options, option_encrypt);
+
+      if (strlen(ctx->signing_options) > 0)
+        strcat (additional_options, ctx->signing_options);
       sprintf(command,
              "openssl req -config %s %s -subj \"%s\" -new -keyout "
              "%s/private/cakey.pem -out %s/careq.pem",
-             ctx->openssl_config_path, option_encrypt, ctx->subject,
+             ctx->openssl_config_path, additional_options, ctx->subject,
              ctx->CA_directory, ctx->CA_directory);
-      fprintf(stderr, "Command is: %s\n", command);
+      fprintf(stderr, "Addl Options: %s\n", additional_options);
+      fprintf(stderr, "Full Command: %s\n", command);
       system(command);
     };
   };

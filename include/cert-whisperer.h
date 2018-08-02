@@ -16,7 +16,7 @@
   limitations under the License.
 */
 
-#define CW_VERSION "0.20-Build-2"
+#define CW_VERSION "0.20-Build-3"
 
 #define EQUALS ==
 
@@ -24,28 +24,29 @@
 #define CW_CMD_SIGN (2)
 
 typedef struct cw_context {
-  int verbosity;
-  char init_parameters_path[1024];
-  json_t *root;
+  char basename [1024];
+  char CA_days[1024];
+  char CA_directory[1024];
+  char ca_specs_1[1024];
+  char CA_template[1024];
   int cert_command;
   char cert_name[1024];
-  char ca_specs_1[1024];
-  char download_file[1024];
-  char CA_directory[1024];
-  char CA_days[1024];
   char certificate_days[1024];
+  char download_file[1024];
+  char ecc_curve_name[1024];
+  char init_parameters_path[1024];
   char openssl_config_path[1024];
-  char temp_prefix[1024];
+  int option_pw_privkey;
   char private_key_passphrase[1024];
-  char CA_template[1024];
-  char temp_base[1024];
-  char subject[1024];
+  char pubkey_class[1024];
+  json_t *root;
   char san_email[1024];
   char san_fqdn[1024];
-  int option_pw_privkey;
-  char pubkey_class[1024];
-  char ecc_curve_name[1024];
-  char basename [1024];
+  char signing_options [1024];
+  char subject[1024];
+  char temp_base[1024];
+  char temp_prefix[1024];
+  int verbosity;
 } CW_CONTEXT;
 
 #define STCW_OK (0)
