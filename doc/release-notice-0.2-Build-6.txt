@@ -1,0 +1,6 @@
+
+frozen after project sample set built.
+
+current version capturing updates to prep
+for support of more browser-friendly cert generation.
+

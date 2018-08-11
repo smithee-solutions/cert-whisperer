@@ -35,3 +35,40 @@ Examples
 
 ecc curves can be used too see sample-ecc
 
+
+how-to make top level CA
+
+t.b.d.
+
+how-to make intermediate CA
+
+t.b.d.
+
+how-to make smime subscriber cert
+
+t.b.d.
+
+how-to make npe subscriber cert
+
+t.b.d.
+
+how-to support a CDP or OCSP Responder
+
+t.b.d.
+
+how-to tune the certificate extensions that are generated
+
+t.b.d.
+
+
+Samples
+=======
+
+There are sample files under doc/samples.
+
+See cw-sample-ecc.json for sample configuration to use ecc.
+
+see zzz2 for sample configuration to use RSASSA-PSS signatures
+
+see zzz3 for sample configuration to satisfy 2018-era CABF/Browser Monopoly
+
