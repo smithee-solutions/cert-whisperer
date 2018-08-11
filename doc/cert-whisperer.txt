@@ -37,8 +37,37 @@ ecc curves can be used too see sample-ecc
 
 
 how-to make top level CA
+========================
 
-t.b.d.
+create a json file to configure the CA.  
+
+set "download" to name the ca (also
+creates a directory.)
+
+set "subject" as the subjectName of the CA.
+
+set "ca-lifetime" as the lifetime of the CA certificate.
+
+Example:
+
+  {
+    "download" : "example_CA",
+    "subject" : "/C=XX/ST=state/L=locality/O=organization/OU=unit-1/CN=example_CA",
+    "ca-lifetime" : "32",
+    "#" : "_end"
+  }
+
+Note: per https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#User-assigned_code_elements we assume it is legitimate to use C=XX as an example country code in
+documentation.
+
+After you configure the json file, run configure-CA against it:
+
+  configure-CA example_CA.json
+
+At this point example_CA is a directory in your current directory and
+it contains a fully configured openssl CA.  The root certificate is 
+example_CA/cacert.pem.
+
 
 how-to make intermediate CA
 
