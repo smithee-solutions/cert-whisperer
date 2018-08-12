@@ -14,16 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+# removed cert-herder - vestigial?
+
 TROOT=opt/tester
-PROGS=cert-herder cert-whisper configure-CA
-SCRIPTS=openssl-TEMPLATE_1.cnf
+PROGS=cert-whisper configure-CA
+SCRIPTS=openssl-TEMPLATE_1.cnf 1-create-CA 2-create-cert 3-sign-cert
+JSON_MAGIC=\
+  ../doc/samples/example_CA.json \
+  ../doc/samples/example_CA-member-TEMPLATE.json
 LD=clang
 CC=clang
 LDFLAGS=-g
 CFLAGS=-c -g -I../include -Wall -Werror
 
 
-all:	${PROGS}
+all:	${PROGS} ${SCRIPTS} ${JSON_MAGIC}
 
 clean:
 	rm -rf ${PROGS} core *.o ${TROOT}
@@ -33,6 +39,7 @@ build:	all
 	cp ${PROGS} ${TROOT}/bin
 	mkdir -p ${TROOT}/etc/cwCA
 	cp ${SCRIPTS} ${TROOT}/etc/cwCA
+	cp ${JSON_MAGIC} ${TROOT}/etc/cwCA
 
 cert-herder:	cert-herder.o Makefile
 	${LD} -o cert-herder cert-herder.o ${LDFLAGS} -ljansson

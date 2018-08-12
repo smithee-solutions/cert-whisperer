@@ -1,0 +1,13 @@
+{
+  "verbosity" : "9",
+  "cert-command" : "sign",
+  "ca-template" : "example_CA-TEMPLATE.cnf",
+  "cert-name" : "CW_BASENAME",
+  "basename" : "CW_BASENAME",
+  "download" : "example_CA",
+  "extensions" : "server_cert",
+  "san-fqdn" : "CW_SAN_FQDN",
+  "subject" : "/C=XX/ST=state/L=locality/O=organization/OU=unit-1/CN=CW_BASENAME",
+  "#" : "_the-end"
+}
+

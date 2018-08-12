@@ -1,0 +1,8 @@
+#!/bin/bash
+CA_NAME=`cat ./this-ca.param`
+TROOT=opt/tester
+TBIN=/${TROOT}/bin
+sed -e "s/CW_BASENAME/$1/g" <${CA_NAME}-sign-TEMPLATE.json >tmp1.json
+sed -e "s/CW_SAN_FQDN/$2/g" <tmp1.json >tmp2.json
+${TBIN}/cert-whisper tmp2.json
+

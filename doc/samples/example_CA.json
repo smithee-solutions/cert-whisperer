@@ -1,0 +1,10 @@
+{
+"verbosity" : "9",
+  "ca-lifetime" : "32",
+  "cert-lifetime" : "7",
+  "download" : "example_CA",
+  "subject" : "/C=XX/ST=state/L=locality/O=organization/OU=unit-1/CN=example_CA",
+  "ca-template" : "./example_CA-TEMPLATE.cnf",
+  "#" : "_the-end"
+}
+

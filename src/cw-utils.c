@@ -256,7 +256,10 @@ int parse_config(CW_CONTEXT *ctx)
       found_field = 0;
   };
   if (found_field)
-  { strcpy(ctx->subject, json_string_value(value)); };
+  {
+    strcpy(ctx->subject, json_string_value(value));
+    fprintf(stderr, "cert subject set to %s\n", ctx->subject);
+  };
 
   return (status);
 
@@ -272,9 +275,15 @@ int setup_config(CW_CONTEXT *ctx)
   char previous_temp[1024];
   int status;
 
+
   status = STCW_OK;
+  if (ctx->verbosity > 3)
+  {
+    fprintf(stderr, " basename: %s\n", ctx->basename);
+    fprintf(stderr, "san_email: %s\n", ctx->san_email);
+    fprintf(stderr, " san_fqdn: %s\n", ctx->san_fqdn);
+  };
   strcpy(last_temp, template_name(ctx, "1"));
-printf("1 CA_directory now %s\n", ctx->CA_directory);
   sprintf(command, "sed -e \"s/CW_DIRECTORY/%s/g\" <%s >%s", ctx->CA_directory,
           ctx->CA_template, last_temp);
   if (ctx->verbosity > 3)
@@ -283,15 +292,17 @@ printf("1 CA_directory now %s\n", ctx->CA_directory);
   if (strlen(ctx->basename) > 0)
   {
     strcpy(previous_temp, last_temp);
-    strcpy(last_temp, template_name(ctx, "3"));
+    strcpy(last_temp, template_name(ctx, "2"));
     sprintf(command, "sed -e \"s/CW_BASE_NAME/%s/g\" <%s >%s", ctx->basename,
             previous_temp, last_temp);
+    if (ctx->verbosity > 3)
+      fprintf(stderr, "Issuing command(292): %s\n", command);
     system(command);
   };
   if (strlen(ctx->san_email) > 0)
   {
     strcpy(previous_temp, last_temp);
-    strcpy(last_temp, template_name(ctx, "2"));
+    strcpy(last_temp, template_name(ctx, "3"));
     sprintf(command, "sed -e \"s/CW_SAN_EMAIL/%s/g\" <%s >%s", ctx->san_email,
             previous_temp, last_temp);
     system(command);
@@ -299,7 +310,7 @@ printf("1 CA_directory now %s\n", ctx->CA_directory);
   if (strlen(ctx->san_fqdn) > 0)
   {
     strcpy(previous_temp, last_temp);
-    strcpy(last_temp, template_name(ctx, "3"));
+    strcpy(last_temp, template_name(ctx, "4"));
     sprintf(command, "sed -e \"s/CW_SAN_FQDN/%s/g\" <%s >%s", ctx->san_fqdn,
             previous_temp, last_temp);
     if (ctx->verbosity > 3)

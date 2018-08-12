@@ -1,0 +1,11 @@
+#!/bin/bash
+CA_NAME=`cat ./this-ca.param`
+TROOT=opt/tester
+TBIN=/${TROOT}/bin
+echo "      Base Name:" $1
+echo "    Common Name:" $2
+echo " Alt (DNS) Name:" $3
+sed -e "s/CW_BASENAME/$1/g" <${CA_NAME}-member-TEMPLATE.json >tmp1.json
+sed -e "s/CW_SUBJ_CN/$2/g" <tmp1.json >tmp2.json
+${TBIN}/cert-whisper tmp2.json
+
