@@ -175,6 +175,21 @@ int parse_config(CW_CONTEXT *ctx)
   if (found_field)
   { ctx->option_pw_privkey = 0; };
 
+  // pri-hostname is primary FQDN used for CN
+
+  if (status EQUALS STCW_OK)
+  {
+    found_field = 1;
+    strcpy(field, "pri-hostname");
+    value = json_object_get(ctx->root, field);
+    if (!json_is_string(value))
+      found_field = 0;
+  };
+  if (found_field)
+  {
+    strcpy(ctx->primary_hostname, json_string_value(value));
+  };
+
   // privkey is the private key password
 
   if (status EQUALS STCW_OK)
@@ -317,6 +332,17 @@ int setup_config(CW_CONTEXT *ctx)
       fprintf(stderr, "Cmd: %s\n", command);
     system(command);
   };
+  if (strlen(ctx->primary_hostname) > 0)
+  {
+    strcpy(previous_temp, last_temp);
+    strcpy(last_temp, template_name(ctx, "5"));
+    sprintf(command, "sed -e \"s/CW_PRI_HOSTNAME/%s/g\" <%s >%s", ctx->primary_hostname,
+      previous_temp, last_temp);
+    if (ctx->verbosity > 3)
+      fprintf(stderr, "Cmd(342): %s\n", command);
+    system(command);
+  };
+
   sprintf(command, "cp %s %s", last_temp, ctx->openssl_config_path);
   if (ctx->verbosity > 3)
     fprintf(stderr, "Cmd: %s\n", command);

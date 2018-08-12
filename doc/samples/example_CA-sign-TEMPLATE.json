@@ -4,6 +4,7 @@
   "ca-template" : "example_CA-TEMPLATE.cnf",
   "cert-name" : "CW_BASENAME",
   "basename" : "CW_BASENAME",
+  "pri-hostname" : "CW_PRI_HOSTNAME",
   "download" : "example_CA",
   "extensions" : "server_cert",
   "san-fqdn" : "CW_SAN_FQDN",

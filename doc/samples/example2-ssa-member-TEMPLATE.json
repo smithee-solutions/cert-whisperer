@@ -1,0 +1,13 @@
+{
+  "verbosity" : "9",
+  "cert-name" : "CW_BASENAME",
+  "basename" : "CW_BASENAME",
+  "subject" :
+    "/C=US/ST=California/L=Berkeley/O=Smithee Solutions LLC/OU=LCBO/CN=CW_SUBJ_CN",
+  "sigopts" : " -sigopt rsa_padding_mode:pss -sigopt rsa_pss_saltlen:20 -sigopt rsa_mgf1_md:sha256",
+  "cert-command" : "issue",
+  "download" : "meie-1",
+  "ca-template" : "./meie-1-TEMPLATE.cnf",
+  "#" : "_the-end"
+}
+

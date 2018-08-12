@@ -25,6 +25,7 @@
 
 typedef struct cw_context {
   char basename [1024];
+  char primary_hostname [1024];
   char CA_days[1024];
   char CA_directory[1024];
   char ca_specs_1[1024];

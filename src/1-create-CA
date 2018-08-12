@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 TROOT=opt/tester
 TBIN=/${TROOT}/bin
 echo initializing CA -$1-
@@ -6,7 +7,7 @@ echo $1 >this-ca.param
 CA=`cat ./this-ca.param`
 
 echo checking for files...
-ls -l 1-create-CA 2-create-cert 3-sign-cert 9-clean
+ls -l bin/1-create-CA bin/2-create-cert bin/3-sign-cert bin/9-clean
 ls -l ${CA}-TEMPLATE.cnf ${CA}-sign.json ${CA}-member-TEMPLATE.json ${CA}.json
 
 echo configuring CA -${CA}-

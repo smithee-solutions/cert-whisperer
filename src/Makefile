@@ -22,7 +22,8 @@ PROGS=cert-whisper configure-CA
 SCRIPTS=openssl-TEMPLATE_1.cnf 1-create-CA 2-create-cert 3-sign-cert
 JSON_MAGIC=\
   ../doc/samples/example_CA.json \
-  ../doc/samples/example_CA-member-TEMPLATE.json
+  ../doc/samples/example_CA-member-TEMPLATE.json \
+  ../doc/samples/example_CA-sign-TEMPLATE.json
 LD=clang
 CC=clang
 LDFLAGS=-g
