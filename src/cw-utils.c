@@ -162,7 +162,7 @@ int parse_config(CW_CONTEXT *ctx)
   if (found_field)
   { strcpy(ctx->ca_specs_1, json_string_value(value)); };
 
-  // nopw causes no password; pw= causes passphrase
+  // nopw causes no password
 
   if (status EQUALS STCW_OK)
   {

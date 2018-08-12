@@ -1,0 +1,11 @@
+{
+  "verbosity" : "9",
+  "download" : "vsa-2",
+  "basename" : "vsa-2",
+  "ca-lifetime" : "32",
+  "cert-lifetime" : "7",
+  "subject" : "/C=QV/ST=Vulcan/L=ShiKahr/O=Vulcan High Council/OU=Research/CN=vsa-1",
+  "ca-template" : "./vsa-2-TEMPLATE.cnf",
+  "#" : "_the-end"
+}
+

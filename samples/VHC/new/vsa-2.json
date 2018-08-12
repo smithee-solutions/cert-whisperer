@@ -1,0 +1,10 @@
+{
+  "verbosity" : "9",
+  "download" : "vhc-1",
+  "cert-command" : "issue",
+  "cert-name" : "vsa-2",
+  "subject" : "/C=VV/ST=Vulcan/L=ShiKahr/O=Vulcan Science Academy/OU=Field Office/CN=vsa-2",
+  "ca-template" : "./vhc-1-TEMPLATE.cnf",
+  "#" : "_the-end"
+}
+

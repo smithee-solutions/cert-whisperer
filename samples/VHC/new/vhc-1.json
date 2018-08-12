@@ -1,0 +1,11 @@
+{
+  "verbosity" : "9",
+  "download" : "vhc-1",
+  "basename" : "vhc-1",
+  "ca-lifetime" : "32",
+  "cert-lifetime" : "7",
+  "subject" : "/C=QV/ST=Vulcan/L=ShiKahr/O=Vulcan High Council/OU=Research/CN=vhc-1",
+  "ca-template" : "./vhc-1-TEMPLATE.cnf",
+  "#" : "_the-end"
+}
+

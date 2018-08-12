@@ -1,0 +1,9 @@
+{
+  "verbosity" : "9",
+  "download" : "vhc-1",
+  "cert-command" : "sign",
+  "cert-name" : "vsa-2",
+  "ca-template" : "./vhc-1-TEMPLATE.cnf",
+  "#" : "_the-end"
+}
+

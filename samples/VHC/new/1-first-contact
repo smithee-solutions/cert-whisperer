@@ -1,0 +1,13 @@
+#!/bin/bash
+set -x
+
+rm -rvf vhc-1 vsa-2
+configure-CA vhc-1.json
+cert-whisper vsa-2.json
+cert-whisper vhc-1-sign.json
+
+configure-CA vsa-2-CA.json
+cp vsa-2_cert.pem vsa-2/cacert.pem
+cp vsa-2_key.pem vsa-2/private/cakey.pem
+cp vsa-2_req.pem vsa-2/careq.pem
+
