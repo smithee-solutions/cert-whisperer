@@ -1,0 +1,7 @@
+#!/bin/bash
+set -x
+rm -vf openssl_config_temp* tmp*
+rm -vf *.cnf *.pem this-ca.param
+rm -vf 1-create-CA 2-create-cert 3-sign-cert *.json
+rm -rvf example_CA
+

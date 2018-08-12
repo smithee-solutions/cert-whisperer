@@ -17,7 +17,7 @@
 
 # removed cert-herder - vestigial?
 
-TROOT=opt/tester
+TROOT=../opt/tester
 PROGS=cert-whisper configure-CA
 SCRIPTS=openssl-TEMPLATE_1.cnf 1-create-CA 2-create-cert 3-sign-cert
 JSON_MAGIC=\
@@ -26,7 +26,7 @@ JSON_MAGIC=\
   ../doc/samples/example_CA-sign-TEMPLATE.json
 LD=clang
 CC=clang
-LDFLAGS=-g
+LDFLAGS=-g -ljansson
 CFLAGS=-c -g -I../include -Wall -Werror
 
 
@@ -42,20 +42,14 @@ build:	all
 	cp ${SCRIPTS} ${TROOT}/etc/cwCA
 	cp ${JSON_MAGIC} ${TROOT}/etc/cwCA
 
-cert-herder:	cert-herder.o Makefile
-	${LD} -o cert-herder cert-herder.o ${LDFLAGS} -ljansson
-
-cert-herder.o:	cert-herder.c ../include/cert-whisperer.h
-	${CC} ${CFLAGS} cert-herder.c
-
 cert-whisper:	cert-whisper.o cw-signer.o cw-utils.o Makefile
-	${LD} -o cert-whisper cert-whisper.o cw-signer.o cw-utils.o ${LDFLAGS} -ljansson
+	${LD} -o cert-whisper cert-whisper.o cw-signer.o cw-utils.o ${LDFLAGS}
 
 cert-whisper.o:	cert-whisper.c ../include/cert-whisperer.h
 	${CC} ${CFLAGS} cert-whisper.c
 
 configure-CA:	configure-CA.o cw-utils.o Makefile
-	${LD} -o configure-CA configure-CA.o cw-utils.o ${LDFLAGS} -ljansson
+	${LD} -o configure-CA configure-CA.o cw-utils.o ${LDFLAGS}
 
 configure-CA.o:	configure-CA.c ../include/cert-whisperer.h
 	${CC} ${CFLAGS} configure-CA.c

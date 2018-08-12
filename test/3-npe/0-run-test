@@ -1,0 +1,13 @@
+#!/bin/bash
+set -x
+BUILD=../../opt/tester
+cp ${BUILD}/etc/cwCA/1-create-CA .
+cp ${BUILD}/etc/cwCA/2-create-cert .
+cp ${BUILD}/etc/cwCA/3-sign-cert .
+cp ${BUILD}/etc/cwCA/*json .
+cp ${BUILD}/etc/cwCA/*cnf .
+cp openssl-TEMPLATE_1.cnf example_CA-TEMPLATE.cnf
+./1-create-CA example_CA
+./2-create-cert tester209 tester209.example.com
+./3-sign-cert tester209 www.example.com tester209.example.com
+
