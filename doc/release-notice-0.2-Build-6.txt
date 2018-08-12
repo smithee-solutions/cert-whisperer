@@ -4,3 +4,7 @@ frozen after project sample set built.
 current version capturing updates to prep
 for support of more browser-friendly cert generation.
 
+see 0- shell script in test/3-npe directory.
+
+note use of CW_PRI_HOSTNAME, not in doc yet.
+
